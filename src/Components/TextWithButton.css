@@ -1,0 +1,29 @@
+.text-with-button {
+  height: 100vh;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    left: 0;
+    width: 40%;
+    justify-content: center;
+    align-items: flex-start;
+    /* padding: 20px; */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* text-align: left; */
+    z-index: 6;  
+  }
+  
+  .text-with-button h2 {
+    margin: 0;
+    color: rgb(224, 224, 224);
+    font-size: 5em;
+    line-height: 1.3;
+    font-weight: 600;
+  }
+  
+  .text-with-button p {
+    margin-top:1rem;
+    margin-bottom: 1.5rem;
+    color: aliceblue;
+    font-size: 1.5em;
+  }
