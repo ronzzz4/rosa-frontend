@@ -86,10 +86,10 @@ const escapeHtml = (unsafe) => {
 let isBotTyping = false;
 
 let ws
- ws = new WebSocket('wss://juicy-melinda-rosa-51d97631.koyeb.app/ws');
+ ws = new WebSocket('wss://rosa-backend-7sr4m57mo-rounaklongani-gmailcoms-projects.vercel.app/ws');
 
 function connectWebSocket() {
-  ws = new WebSocket('wss://juicy-melinda-rosa-51d97631.koyeb.app/ws');
+  ws = new WebSocket('wss://rosa-backend-7sr4m57mo-rounaklongani-gmailcoms-projects.vercel.app/ws');
 }
 // function formatTextResponse(response) {
 //   // Replace line breaks with <br> for HTML rendering
