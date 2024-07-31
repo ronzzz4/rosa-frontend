@@ -86,10 +86,10 @@ const escapeHtml = (unsafe) => {
 let isBotTyping = false;
 
 let ws
- ws = new WebSocket('wss://yearling-guglielma-rosa-5941acec.koyeb.app/ws');
+ ws = new WebSocket('wss://embarrassing-serena-rosa-bec69e45.koyeb.app/ws');
 
 function connectWebSocket() {
-  ws = new WebSocket('wss://yearling-guglielma-rosa-5941acec.koyeb.app/ws');
+  ws = new WebSocket('wss://embarrassing-serena-rosa-bec69e45.koyeb.app/ws');
 }
 // function formatTextResponse(response) {
 //   // Replace line breaks with <br> for HTML rendering
