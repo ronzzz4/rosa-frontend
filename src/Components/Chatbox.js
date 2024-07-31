@@ -87,7 +87,7 @@ let isBotTyping = false;
 
 let ws
  ws = new WebSocket('wss://embarrassing-serena-rosa-bec69e45.koyeb.app/ws');
-
+//new
 function connectWebSocket() {
   ws = new WebSocket('wss://embarrassing-serena-rosa-bec69e45.koyeb.app/ws');
 }
