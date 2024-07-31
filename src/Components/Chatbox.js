@@ -91,18 +91,18 @@ let ws
 function connectWebSocket() {
   ws = new WebSocket('wss://embarrassing-serena-rosa-bec69e45.koyeb.app/ws');
 }
-// function formatTextResponse(response) {
+function formatTextResponse(response) {
 //   // Replace line breaks with <br> for HTML rendering
-//   let formattedText = response.replace(/\n/g, "<br>");
+   let formattedText = response.replace(/\n/g, "<br>");
   
-//   // Replace **text** with <strong>text</strong> for bold styling
-//   formattedText = formattedText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+   // Replace **text** with <strong>text</strong> for bold styling
+   formattedText = formattedText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
   
 //   // Replace URLs with clickable links
-//   formattedText = formattedText.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
+   formattedText = formattedText.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
   
-//   return formattedText;
-// }
+   return formattedText;
+ }
 
 // $env:PORT = 4000; npm start
 
@@ -240,8 +240,8 @@ const ChatBox = () => {
       isBotTyping = false;
       showTyping();
       // Append the user's message to the chatbox
-      // const botMessage = formatTextResponse(event.data)
-      const botMessage = renderCards(event.data)
+       const botMessage = formatTextResponse(event.data)
+      //const botMessage = renderCards(event.data)
       const botMessageHTML = ReactDOMServer.renderToString(botMessage);
       const fragment = document.createDocumentFragment();
       const chatLi = document.createElement("li");
