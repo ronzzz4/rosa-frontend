@@ -4,7 +4,7 @@ import './Chatbox.css';
 import { PlaceHolder } from './PlaceHolder';
 import Card from './Card';
 import { render } from '@testing-library/react';
-import renderCards from './renderCards';
+//import renderCards from './renderCards';
 import ReactDOMServer from 'react-dom/server';
 
 const ChatContainer = styled.div`
@@ -91,48 +91,48 @@ let ws
 function connectWebSocket() {
   ws = new WebSocket('wss://embarrassing-serena-rosa-bec69e45.koyeb.app/ws');
 }
-function formatTextResponse(response) {
+//function formatTextResponse(response) {
 //   // Replace line breaks with <br> for HTML rendering
-   let formattedText = response.replace(/\n/g, "<br>");
+   //let formattedText = response.replace(/\n/g, "<br>");
   
    // Replace **text** with <strong>text</strong> for bold styling
-   formattedText = formattedText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+   //formattedText = formattedText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
   
 //   // Replace URLs with clickable links
-   formattedText = formattedText.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
+   //formattedText = formattedText.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
   
-   return formattedText;
- }
+   //return formattedText;
+ //}
 
 // $env:PORT = 4000; npm start
 
 
 
-// function renderCards(data) {
-//   try {
-//     const json = JSON.parse(data); // Log the parsed JSON
+ function renderCards(data) {
+   try {
+     const json = JSON.parse(data); // Log the parsed JSON
 
-//     if (json.Type === "message") {
-//       return json.Message;
-//     } else if (json.Type === "products") {
-//       // Code to render react component for products will go here
-//       const cards = json.Fields.map(item =>{
-//         return <Card 
-//         item = {item}
-//         />
-//       })
-//       return cards
+     if (json.Type === "message") {
+      return json.Message;
+     } else if (json.Type === "products") {
+       // Code to render react component for products will go here
+       const cards = json.Fields.map(item =>{
+         return <Card 
+         item = {item}
+         />
+       })
+       return cards
       
-//     } else {
-//       console.error("Unknown type received:", json.Type);
-//       return "Sorry an unexpected error occured. PLease try again.";
-//     }
-//   } catch (error) {
-//     console.error("Failed to parse JSON data:", error);
-//     return "Sorry an unexpected error occured. PLease try again.";
-//   }
+     } else {
+       console.error("Unknown type received:", json.Type);
+       return "Sorry an unexpected error occured. PLease try again.";
+     }
+   } catch (error) {
+     console.error("Failed to parse JSON data:", error);
+     return "Sorry an unexpected error occured. PLease try again.";
+   }
   
-// }
+ }
 
 /*
 [
@@ -161,25 +161,25 @@ function formatTextResponse(response) {
   })
     */
 
-// function formatTextResponse(data) {
-//   try {
-//     const json = JSON.parse(data); // Log the parsed JSON
+ function formatTextResponse(data) {
+   try {
+     const json = JSON.parse(data); // Log the parsed JSON
 
-//     if (json.Type === "message") {
-//       return json.Message;
-//     } else if (json.Type === "products") {
-//       // Code to render react component for products will go here
-//       renderCards(json.Fields)
+     if (json.Type === "message") {
+       return json.Message;
+     } else if (json.Type === "products") {
+       // Code to render react component for products will go here
+       renderCards(json.Fields)
       
-//     } else {
-//       console.error("Unknown type received:", json.Type);
-//       return "Sorry an unexpected error occured. PLease try again.";
-//     }
-//   } catch (error) {
-//     console.error("Failed to parse JSON data:", error);
-//     return "Sorry an unexpected error occured. PLease try again.";
-//   }
-// }
+     } else {
+       console.error("Unknown type received:", json.Type);
+       return "Sorry an unexpected error occured. PLease try again.";
+     }
+   } catch (error) {
+     console.error("Failed to parse JSON data:", error);
+     return "Sorry an unexpected error occured. PLease try again.";
+   }
+ }
 
 /*
 "{\n    \"Type\": \"message\",\n    \"Message\": \"Namaste! What are you looking for today? \\n\"\n}"
