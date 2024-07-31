@@ -86,10 +86,10 @@ const escapeHtml = (unsafe) => {
 let isBotTyping = false;
 
 let ws
- ws = new WebSocket('ws://127.0.0.1:8000/ws');
+ ws = new WebSocket('ws://ripe-lilly-rosa-52ed8952.koyeb.app/ws');
 
 function connectWebSocket() {
-  ws = new WebSocket('ws://127.0.0.1:8000/ws');
+  ws = new WebSocket('ws://ripe-lilly-rosa-52ed8952.koyeb.app/ws');
 }
 // function formatTextResponse(response) {
 //   // Replace line breaks with <br> for HTML rendering
