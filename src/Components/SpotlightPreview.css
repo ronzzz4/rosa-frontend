@@ -59,7 +59,14 @@
         
         100% {
             opacity: 1;
-            transform: translate(-66%, -31%) scale(2.1);
+            transform: translate(-66%, -35%) scale(1.8);
         }
+    }
+    .mobile-view {
+        padding: 0px 5px;
+    }
+    .landing-text {
+        justify-content: flex-start !important;
+        margin-top: 65%;
     }
   }

@@ -24,6 +24,19 @@
   .text-with-button p {
     margin-top:1rem;
     margin-bottom: 1.5rem;
-    color: aliceblue;
+    color: rgb(150, 150, 150);
     font-size: 1.5em;
+  }
+
+  @media(max-width: 490px) {
+    .text-with-button{
+      width: 100%;
+      align-items: center;
+    }
+    .text-with-button h2 {
+      font-size: 2.1em;
+    }
+    .text-with-button p {
+      font-size: 1em;
+    }
   }

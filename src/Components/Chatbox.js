@@ -2,6 +2,10 @@ import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import './Chatbox.css';
 import { PlaceHolder } from './PlaceHolder';
+import Card from './Card';
+import { render } from '@testing-library/react';
+import renderCards from './renderCards';
+import ReactDOMServer from 'react-dom/server';
 
 const ChatContainer = styled.div`
   width: 100vw;
@@ -64,6 +68,9 @@ const ChatArea = styled.ul`
     overflow-x: hidden;
 `
 
+const typingIndicatorDiv = document.createElement('div');
+typingIndicatorDiv.classList.add('typing-indicator', "invisiblee");
+typingIndicatorDiv.innerHTML = '<span></span><span></span><span></span>';
 
 let originalMessage
 
@@ -76,96 +83,221 @@ const escapeHtml = (unsafe) => {
       .replace(/'/g, "&#039;");
 };
 
+let isBotTyping = false;
+
 let ws
  ws = new WebSocket('ws://127.0.0.1:8000/ws');
 
 function connectWebSocket() {
   ws = new WebSocket('ws://127.0.0.1:8000/ws');
 }
-function formatTextResponse(response) {
-  // Replace line breaks with <br> for HTML rendering
-  let formattedText = response.replace(/\n/g, "<br>");
+// function formatTextResponse(response) {
+//   // Replace line breaks with <br> for HTML rendering
+//   let formattedText = response.replace(/\n/g, "<br>");
   
-  // Replace **text** with <strong>text</strong> for bold styling
-  formattedText = formattedText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+//   // Replace **text** with <strong>text</strong> for bold styling
+//   formattedText = formattedText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
   
-  // Replace URLs with clickable links
-  formattedText = formattedText.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
+//   // Replace URLs with clickable links
+//   formattedText = formattedText.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
   
-  return formattedText;
-}
+//   return formattedText;
+// }
+
+// $env:PORT = 4000; npm start
+
+
+
+// function renderCards(data) {
+//   try {
+//     const json = JSON.parse(data); // Log the parsed JSON
+
+//     if (json.Type === "message") {
+//       return json.Message;
+//     } else if (json.Type === "products") {
+//       // Code to render react component for products will go here
+//       const cards = json.Fields.map(item =>{
+//         return <Card 
+//         item = {item}
+//         />
+//       })
+//       return cards
+      
+//     } else {
+//       console.error("Unknown type received:", json.Type);
+//       return "Sorry an unexpected error occured. PLease try again.";
+//     }
+//   } catch (error) {
+//     console.error("Failed to parse JSON data:", error);
+//     return "Sorry an unexpected error occured. PLease try again.";
+//   }
+  
+// }
+
+/*
+[
+    {
+        id: 1,
+        title: "Life lessons with Katie Zaferes",
+        description:"",
+        price: 136,
+        coverImg: "zaferes.png",
+        stats:{
+            ratings: 5.0,
+            reviewCount: 6
+        },
+        location: "Online",
+        openSpots:9 
+    },
+]
+*/
+
+    /*
+    const cards = data.map(item =>{
+    return <Card 
+    title = {item.Title}
+    item = {item}
+    />
+  })
+    */
+
+// function formatTextResponse(data) {
+//   try {
+//     const json = JSON.parse(data); // Log the parsed JSON
+
+//     if (json.Type === "message") {
+//       return json.Message;
+//     } else if (json.Type === "products") {
+//       // Code to render react component for products will go here
+//       renderCards(json.Fields)
+      
+//     } else {
+//       console.error("Unknown type received:", json.Type);
+//       return "Sorry an unexpected error occured. PLease try again.";
+//     }
+//   } catch (error) {
+//     console.error("Failed to parse JSON data:", error);
+//     return "Sorry an unexpected error occured. PLease try again.";
+//   }
+// }
+
+/*
+"{\n    \"Type\": \"message\",\n    \"Message\": \"Namaste! What are you looking for today? \\n\"\n}"
+*/
+// const messageData = event: '{"data": "message", "Message": "Namaste! What are you looking for today? \\n"}';
+
+// formatTextResponse(messageData)
 
 const ChatBox = () => {
-  // const textareaRef = useRef(null);
   const chatboxRef = useRef(null)
-  // const chatinputRef = useRef(null)
-  
-  // useEffect(() => {
-    //   const textarea = textareaRef.current;
-    //   const chatinput = chatinputRef.current;
-    
-    // const handleChatSubmit = (message) =>{
-      //   originalMessage = message.trim();
-      //   const cleanedMessage = escapeHtml(originalMessage);
-      //   if (!originalMessage) return;
-      
-      // }
-      //   const inputInitHeight = textarea.scrollHeight;
-      
-      
-      
-      
-      const handleChatSubmit = (message) => {
-      const chatbox = chatboxRef.current;
-      originalMessage = message.trim();
-      const cleanedMessage = escapeHtml(originalMessage);
-      if (!originalMessage) return;
 
-      ws.send(originalMessage)
+  const handleChatSubmit = (message) => {
+    const chatbox = chatboxRef.current;
+    originalMessage = message.trim();
+    const cleanedMessage = escapeHtml(originalMessage);
+    if (!originalMessage) return;
 
-      const adjustChatboxScroll = () => {
-        chatbox.scrollTop = chatbox.scrollHeight;
-      };
-
-       // Append the user's message to the chatbox
-       const fragment = document.createDocumentFragment();
-       const chatLi = document.createElement("li");
-       chatLi.classList.add("chat", "invisiblee", "outgoing");
-       chatLi.innerHTML = `<p>${cleanedMessage}</p>`;
-       fragment.appendChild(chatLi);
-       chatbox.appendChild(fragment);
-       setTimeout(()=>{
-         adjustChatboxScroll()
-          chatLi.classList.add("visible")
-       },100)
-
-      ws.onmessage = function(event){
-          // Append the user's message to the chatbox
-        const botMessage = formatTextResponse(event.data)
-
-        const fragment = document.createDocumentFragment();
-        const chatLi = document.createElement("li");
-        chatLi.classList.add("chat", "invisiblee", "incoming");
-        chatLi.innerHTML = `<p>${botMessage}</p>`;
-        fragment.appendChild(chatLi);
-        chatbox.appendChild(fragment);
-        setTimeout(()=>{
-          adjustChatboxScroll()
-            chatLi.classList.add("visible")
-        },100)
+    const showTyping = () => {
+      if(isBotTyping) {
+          typingIndicatorDiv.style.display = 'flex';
+          chatbox.appendChild(typingIndicatorDiv);
+          setTimeout(()=>{
+              adjustChatboxScroll();
+              typingIndicatorDiv.classList.add("visible")
+          },200)
       }
-       
-
-      ws.onclose = (event) => {
-        console.log('WebSocket connection closed. Code:', event.code, 'Reason:', event.reason || 'No reason provided');
-        // Attempt to reconnect after a delay
-        setTimeout(() => {
-            console.log('Reconnecting WebSocket...');
-            connectWebSocket();
-        }, 5000);
+      if(!isBotTyping){
+          typingIndicatorDiv.style.display = 'none';
+          typingIndicatorDiv.classList.remove('visible')
+      }
+  } 
+    
+    ws.send(originalMessage)
+    
+    const adjustChatboxScroll = () => {
+      chatbox.scrollTop = chatbox.scrollHeight;
     };
 
+
+    
+    // Append the user's message to the chatbox
+    const fragment = document.createDocumentFragment();
+    const chatLi = document.createElement("li");
+    chatLi.classList.add("chat", "invisiblee", "outgoing");
+    chatLi.innerHTML = `<p>${cleanedMessage}</p>`;
+    fragment.appendChild(chatLi);
+    chatbox.appendChild(fragment);
+    setTimeout(()=>{
+      adjustChatboxScroll()
+      chatLi.classList.add("visible")
+    },100)
+    
+    isBotTyping = true;
+    showTyping();
+
+    ws.onmessage = function(event){
+      
+      isBotTyping = false;
+      showTyping();
+      // Append the user's message to the chatbox
+      // const botMessage = formatTextResponse(event.data)
+      const botMessage = renderCards(event.data)
+      const botMessageHTML = ReactDOMServer.renderToString(botMessage);
+      const fragment = document.createDocumentFragment();
+      const chatLi = document.createElement("li");
+      chatLi.classList.add("chat", "invisiblee", "incoming");
+      chatLi.innerHTML = botMessageHTML;
+      fragment.appendChild(chatLi);
+      chatbox.appendChild(fragment);
+      setTimeout(()=>{
+        adjustChatboxScroll()
+          chatLi.classList.add("visible")
+      },100)
+    }
+      
+
+    ws.onclose = (event) => {
+      isBotTyping = false;
+      showTyping();
+      console.log('WebSocket connection closed. Code:', event.code, 'Reason:', event.reason || 'No reason provided');
+      const fragment = document.createDocumentFragment();
+      const chatLi = document.createElement("li");
+      chatLi.classList.add("chat", "invisiblee", "incoming");
+      chatLi.innerHTML = `<p>An unexpected error occurred, please try again.</p>`;
+      fragment.appendChild(chatLi);
+      chatbox.appendChild(fragment);  
+      setTimeout(() => {
+          adjustChatboxScroll();
+          chatLi.classList.add("visible");
+      }, 100);
+      // Attempt to reconnect after a delay
+      setTimeout(() => {
+          console.log('Reconnecting WebSocket...');
+          connectWebSocket();
+      }, 5000);
     };
+
+    ws.onerror = (error) => {
+      isBotTyping = false;
+      showTyping();
+      console.error('WebSocket error:', error);
+      const fragment = document.createDocumentFragment();
+      const chatLi = document.createElement("li");
+      chatLi.classList.add("chat", "invisiblee", "incoming");
+      chatLi.innerHTML = `<p>An unexpected error occurred, please try again.</p>`;
+      fragment.appendChild(chatLi);
+      chatbox.appendChild(fragment);  
+      setTimeout(() => {
+          adjustChatboxScroll();
+          chatLi.classList.add("visible");
+      }, 100);
+      setTimeout(() => {
+          console.log('Reconnecting WebSocket...');
+          connectWebSocket();
+      }, 5000);
+    };
+
+  };
 
   //   textarea.addEventListener('input', () => {
   //     // Set the height to auto temporarily to get the full scrollHeight
